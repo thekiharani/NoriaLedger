@@ -16,6 +16,9 @@ def apply_configuration():
 	ensure_modules()
 	ensure_task_templates()
 	frappe.db.set_single_value("System Settings", "app_name", "Noria Ledger")
+	# Encrypt database/file backups; the per-site key lives in site_config.json
+	# (backup_encryption_key) and must be stored with the site configs.
+	frappe.db.set_single_value("System Settings", "encrypt_backup", 1)
 	frappe.db.commit()
 
 

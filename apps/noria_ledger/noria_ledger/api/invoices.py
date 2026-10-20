@@ -249,8 +249,14 @@ def cancel(kind: str, name: str):
 
 @frappe.whitelist(methods=["POST"])
 @service_endpoint("invoices.make_return", write=True)
-def make_return(kind: str, name: str, posting_date: str | None = None, reason: str | None = None, idempotency_key: str | None = None):
-	"""Full credit note (sales) or debit note (purchase) against a posted invoice."""
+def make_return(kind: str, name: str, posting_date: str | None = None, reason: str | None = None,
+                apply_to_invoice: bool = True, idempotency_key: str | None = None):
+	"""Full credit note (sales) or debit note (purchase) against a posted invoice.
+
+	apply_to_invoice=True offsets the original invoice's outstanding amount
+	(ERPNext `update_outstanding_for_self = 0`). False keeps a standalone
+	credit balance to be allocated later via payment reconciliation.
+	"""
 	if existing := find_idempotent_result(idempotency_key):
 		return doc_summary(frappe.get_doc(existing.reference_doctype, existing.reference_name), idempotent_replay=True)
 	cfg = _kind(kind)
@@ -262,6 +268,7 @@ def make_return(kind: str, name: str, posting_date: str | None = None, reason: s
 	else:
 		from erpnext.accounts.doctype.purchase_invoice.purchase_invoice import make_debit_note as make
 	ret = make(name)
+	ret.update_outstanding_for_self = 0 if frappe.utils.sbool(apply_to_invoice) else 1
 	ret.posting_date = getdate(posting_date or nowdate())
 	ret.set_posting_time = 1
 	ret.remarks = reason

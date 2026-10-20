@@ -145,12 +145,9 @@ cmd_test() {
       bench_exec --site "$NORIA_HUB_SITE" run-tests --app noria_practice
       ;;&
     ledger|all)
-      local site="${NORIA_TEST_CLIENT_SITE:-}"
-      [[ -n "$site" ]] || site="$(dc exec -T backend bash -c "ls sites | grep '\\.${NORIA_CLIENT_SITE_SUFFIX}\$' | head -1")"
-      [[ -n "$site" ]] || die "no client site found; run seed first or set NORIA_TEST_CLIENT_SITE"
-      info "noria_ledger tests on $site"
-      bench_exec --site "$site" set-config -p allow_tests 1
-      bench_exec --site "$site" run-tests --app noria_ledger
+      ensure_ledger_test_site
+      info "noria_ledger tests on $LEDGER_TEST_SITE (disposable test site)"
+      bench_exec --site "$LEDGER_TEST_SITE" run-tests --app noria_ledger
       ;;&
     e2e|all)
       info "end-to-end API workflow through the public edge"
@@ -159,6 +156,26 @@ cmd_test() {
     hub|ledger) ;;
     *) die "unknown test target $target (hub|ledger|e2e|all)" ;;
   esac
+}
+
+LEDGER_TEST_SITE="ledger-test.${NORIA_CLIENT_SITE_SUFFIX:-ledger.internal}"
+
+# Ledger tests post real ERPNext documents, so they only ever run on a dedicated
+# disposable client site flagged with noria_test_site=1 — never on client books.
+ensure_ledger_test_site() {
+  require_non_production "ledger tests"
+  if ! dc exec -T backend test -d "sites/$LEDGER_TEST_SITE"; then
+    info "creating disposable ledger test site $LEDGER_TEST_SITE"
+    dc run --rm --no-deps -T provisioner bash -euc '
+      bench new-site "$0" --mariadb-user-host-login-scope=% \
+        --db-root-password "$(cat "$NORIA_DB_ROOT_PASSWORD_FILE")" \
+        --admin-password "$(openssl rand -hex 16)" \
+        --install-app erpnext --install-app noria_ledger >/dev/null' "$LEDGER_TEST_SITE"
+    bench_exec --site "$LEDGER_TEST_SITE" execute noria_ledger.provisioning.bootstrap \
+      --kwargs '{"company_name": "Noria Test Co", "company_abbr": "NTC", "fy_start_date": "2026-01-01"}' >/dev/null
+  fi
+  bench_exec --site "$LEDGER_TEST_SITE" set-config -p allow_tests 1
+  bench_exec --site "$LEDGER_TEST_SITE" set-config -p noria_test_site 1
 }
 
 cmd_bench() { dc exec backend bench "$@"; }
