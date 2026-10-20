@@ -1,0 +1,220 @@
+# Noria Ledger — base Compose stack (all environments).
+#
+# Derived from the official frappe_docker compose.yaml + overrides/compose.mariadb.yaml
+# + overrides/compose.redis.yaml, adapted for:
+#   * a Caddy edge serving the React app and proxying /api to the hub site only,
+#   * a dedicated provisioner worker that is the ONLY Frappe container holding the
+#     MariaDB root password (needed for `bench new-site`),
+#   * pinned image digests and Docker secrets instead of plaintext env passwords.
+#
+# Always run through infrastructure/scripts/noria.sh (it selects env file + overrides).
+
+name: ${COMPOSE_PROJECT_NAME:-noria}
+
+x-backend-image: &backend_image
+  image: ${NORIA_BACKEND_IMAGE:-noria-ledger/backend}:${NORIA_TAG:-dev}
+  pull_policy: ${NORIA_PULL_POLICY:-never}
+  restart: ${RESTART_POLICY:-unless-stopped}
+
+x-depends-on-configurator: &depends_on_configurator
+  depends_on:
+    configurator:
+      condition: service_completed_successfully
+
+x-backend-defaults: &backend_defaults
+  <<: [*depends_on_configurator, *backend_image]
+  volumes:
+    - sites:/home/frappe/frappe-bench/sites
+    - logs:/home/frappe/frappe-bench/logs
+  logging: &json_logging
+    driver: json-file
+    options:
+      max-size: "20m"
+      max-file: "5"
+
+services:
+  db:
+    image: ${UPSTREAM_REGISTRY:-docker.io}/library/mariadb:11.8@sha256:f16d7a344413e519dff518f27bdb221388f84b0d274c97c4fb5f2cb0dc1b34fa
+    restart: ${RESTART_POLICY:-unless-stopped}
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+      - --innodb-buffer-pool-size=${DB_INNODB_BUFFER_POOL_SIZE:-512M}
+      - --max-connections=${DB_MAX_CONNECTIONS:-300}
+    environment:
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MARIADB_AUTO_UPGRADE: "1"
+    secrets:
+      - db_root_password
+    volumes:
+      - db-data:/var/lib/mysql
+    logging: *json_logging
+
+  redis-cache:
+    image: ${UPSTREAM_REGISTRY:-docker.io}/library/redis:8.10-trixie@sha256:2c2dff791878316e3b083188be0d578423b24813cdda5de0e80ea4f7b3e6bfd6
+    restart: ${RESTART_POLICY:-unless-stopped}
+    # Pure cache: no persistence, bounded memory, LRU eviction.
+    command: ["redis-server", "--save", "", "--appendonly", "no",
+              "--maxmemory", "${REDIS_CACHE_MAXMEMORY:-256mb}", "--maxmemory-policy", "allkeys-lru"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    logging: *json_logging
+
+  redis-queue:
+    image: ${UPSTREAM_REGISTRY:-docker.io}/library/redis:8.10-trixie@sha256:2c2dff791878316e3b083188be0d578423b24813cdda5de0e80ea4f7b3e6bfd6
+    restart: ${RESTART_POLICY:-unless-stopped}
+    # Job queue + realtime pub/sub: persisted (AOF) so queued jobs survive restarts.
+    # Never evict queue data.
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory-policy", "noeviction"]
+    volumes:
+      - redis-queue-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    logging: *json_logging
+
+  configurator:
+    <<: *backend_image
+    restart: on-failure
+    entrypoint: ["bash", "-c"]
+    command:
+      - >
+        ls -1 apps > sites/apps.txt;
+        bench set-config -g db_host db;
+        bench set-config -gp db_port 3306;
+        bench set-config -g redis_cache redis://redis-cache:6379;
+        bench set-config -g redis_queue redis://redis-queue:6379;
+        bench set-config -g redis_socketio redis://redis-queue:6379;
+        bench set-config -gp socketio_port 9000;
+        bench set-config -gp workers '{"noria_provisioning": {"timeout": 3600}}';
+        bench set-config -g chromium_path /usr/lib/chromium/chromium-headless-shell;
+        echo configured
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+    depends_on:
+      db:
+        condition: service_healthy
+      redis-cache:
+        condition: service_healthy
+      redis-queue:
+        condition: service_healthy
+    logging: *json_logging
+
+  backend:
+    <<: *backend_defaults
+    environment:
+      GUNICORN_THREADS: ${GUNICORN_THREADS:-4}
+      GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}
+      GUNICORN_TIMEOUT: ${GUNICORN_TIMEOUT:-120}
+    healthcheck:
+      # /api/method/ping is served for any resolvable site; use the hub site.
+      test: ["CMD-SHELL", "curl -fsS -H \"Host: ${NORIA_HUB_SITE}\" http://127.0.0.1:8000/api/method/ping || exit 1"]
+      start_period: 40s
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  websocket:
+    <<: [*depends_on_configurator, *backend_image]
+    command: ["node", "/home/frappe/frappe-bench/apps/frappe/socketio.js"]
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+    logging: *json_logging
+
+  queue-short:
+    <<: *backend_defaults
+    command: ["bench", "worker", "--queue", "short,default"]
+
+  queue-long:
+    <<: *backend_defaults
+    command: ["bench", "worker", "--queue", "long,default,short"]
+
+  scheduler:
+    <<: *backend_defaults
+    command: ["bench", "schedule"]
+
+  # The only Frappe container with database root credentials. It consumes the
+  # dedicated `noria_provisioning` queue (client-site creation / offboarding) and
+  # runs the hub-site creation job.
+  provisioner:
+    <<: *backend_defaults
+    command: ["bench", "worker", "--queue", "noria_provisioning"]
+    environment:
+      NORIA_DB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      NORIA_HUB_ADMIN_PASSWORD_FILE: /run/secrets/hub_admin_password
+    secrets:
+      - db_root_password
+      - hub_admin_password
+
+  # Frappe's own nginx (desk + /assets). Operations access only: published on
+  # loopback, never routed by the public edge.
+  admin-frontend:
+    <<: *backend_image
+    command: ["nginx-entrypoint.sh"]
+    environment:
+      BACKEND: backend:8000
+      SOCKETIO: websocket:9000
+      NGINX_LISTEN_PORT: "8080"
+      FRAPPE_SITE_NAME_HEADER: $$host
+      UPSTREAM_REAL_IP_ADDRESS: 127.0.0.1
+      UPSTREAM_REAL_IP_HEADER: X-Forwarded-For
+      UPSTREAM_REAL_IP_RECURSIVE: "off"
+      PROXY_READ_TIMEOUT: "120"
+      CLIENT_MAX_BODY_SIZE: 50m
+    ports:
+      - "127.0.0.1:${NORIA_ADMIN_PORT:-8081}:8080"
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+    depends_on:
+      - backend
+      - websocket
+    logging: *json_logging
+
+  # Public edge: React SPA + /api proxy pinned to the hub site.
+  edge:
+    image: ${NORIA_EDGE_IMAGE:-noria-ledger/edge}:${NORIA_TAG:-dev}
+    pull_policy: ${NORIA_PULL_POLICY:-never}
+    restart: ${RESTART_POLICY:-unless-stopped}
+    environment:
+      NORIA_SITE_ADDRESS: ${NORIA_SITE_ADDRESS:-:80}
+      NORIA_HUB_SITE: ${NORIA_HUB_SITE}
+    ports:
+      - "${NORIA_HTTP_PORT:-8080}:80"
+      - "${NORIA_HTTPS_PORT:-8443}:443"
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:2019/metrics"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+    logging: *json_logging
+
+secrets:
+  db_root_password:
+    file: ${NORIA_SECRETS_DIR:-../../secrets}/db_root_password
+  hub_admin_password:
+    file: ${NORIA_SECRETS_DIR:-../../secrets}/hub_admin_password
+
+volumes:
+  db-data:
+  redis-queue-data:
+  sites:
+  logs:
+  caddy-data:
+  caddy-config:

@@ -1,0 +1,51 @@
+# Staging / production override. Images come from your registry
+# (NORIA_PULL_POLICY=always or missing, NORIA_TAG = immutable release tag).
+# Resource limits are starting points; tune from docs/OPTIMIZATION_REPORT.md data.
+
+x-limits: &limits
+  deploy:
+    resources:
+      limits:
+        memory: 1g
+
+services:
+  backend:
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+  queue-short:
+    <<: *limits
+  queue-long:
+    <<: *limits
+  provisioner:
+    <<: *limits
+  scheduler:
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+  db:
+    deploy:
+      resources:
+        limits:
+          memory: ${DB_MEMORY_LIMIT:-2g}
+  # Scheduled backups of every site (DB + files) — see docs/BACKUP_AND_RECOVERY.md.
+  backup-cron:
+    image: ${NORIA_BACKEND_IMAGE:-noria-ledger/backend}:${NORIA_TAG:-dev}
+    pull_policy: ${NORIA_PULL_POLICY:-missing}
+    restart: unless-stopped
+    entrypoint: ["bash", "-c"]
+    command:
+      - >
+        while true; do
+          sleep $${NORIA_BACKUP_INTERVAL_SECONDS:-21600};
+          bench --site all backup --with-files || echo "backup failed" >&2;
+        done
+    environment:
+      NORIA_BACKUP_INTERVAL_SECONDS: ${NORIA_BACKUP_INTERVAL_SECONDS:-21600}
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+    depends_on:
+      configurator:
+        condition: service_completed_successfully

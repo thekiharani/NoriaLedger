@@ -1,0 +1,318 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "CLT-.#####",
+ "creation": "2026-10-20 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "business_name",
+  "legal_name",
+  "business_type",
+  "industry",
+  "status",
+  "column_break_1",
+  "kra_pin",
+  "registration_number",
+  "vat_registered",
+  "email",
+  "phone",
+  "address",
+  "section_accounting",
+  "country",
+  "currency",
+  "fiscal_year_start",
+  "chart_of_accounts",
+  "column_break_2",
+  "created_by_firm",
+  "company_name",
+  "company_abbr",
+  "section_site",
+  "site_name",
+  "provisioning_status",
+  "provisioning_error",
+  "column_break_3",
+  "last_activity",
+  "archived_on",
+  "section_stats",
+  "stat_unreconciled",
+  "stat_drafts",
+  "stat_overdue_invoices",
+  "stat_last_posting_date",
+  "column_break_stats",
+  "stat_cash_and_bank",
+  "stat_receivables",
+  "stat_payables",
+  "stat_updated_on",
+  "section_onboarding",
+  "onboarding_checklist"
+ ],
+ "fields": [
+  {
+   "fieldname": "business_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Business Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "legal_name",
+   "fieldtype": "Data",
+   "label": "Legal Name"
+  },
+  {
+   "default": "Limited Company",
+   "fieldname": "business_type",
+   "fieldtype": "Select",
+   "label": "Business Type",
+   "options": "Limited Company\nSole Proprietor\nPartnership\nNGO / Non-profit\nOther"
+  },
+  {
+   "fieldname": "industry",
+   "fieldtype": "Data",
+   "label": "Industry"
+  },
+  {
+   "default": "Onboarding",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Onboarding\nActive\nSuspended\nArchived"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "kra_pin",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "KRA PIN"
+  },
+  {
+   "fieldname": "registration_number",
+   "fieldtype": "Data",
+   "label": "Registration Number"
+  },
+  {
+   "fieldname": "vat_registered",
+   "fieldtype": "Check",
+   "label": "VAT Registered"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fieldname": "section_accounting",
+   "fieldtype": "Section Break",
+   "label": "Accounting Setup"
+  },
+  {
+   "default": "Kenya",
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "label": "Country",
+   "options": "Country"
+  },
+  {
+   "default": "KES",
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "fiscal_year_start",
+   "fieldtype": "Date",
+   "label": "Fiscal Year Start",
+   "reqd": 1
+  },
+  {
+   "default": "Standard with Numbers",
+   "fieldname": "chart_of_accounts",
+   "fieldtype": "Select",
+   "label": "Chart Of Accounts",
+   "options": "Standard\nStandard with Numbers"
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "created_by_firm",
+   "fieldtype": "Link",
+   "label": "Created By Firm",
+   "options": "Accounting Firm",
+   "read_only": 1
+  },
+  {
+   "fieldname": "company_name",
+   "fieldtype": "Data",
+   "label": "ERPNext Company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "company_abbr",
+   "fieldtype": "Data",
+   "label": "Company Abbr",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_site",
+   "fieldtype": "Section Break",
+   "label": "Workspace"
+  },
+  {
+   "fieldname": "site_name",
+   "fieldtype": "Data",
+   "label": "Site Name",
+   "read_only": 1
+  },
+  {
+   "default": "Not Provisioned",
+   "fieldname": "provisioning_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Provisioning Status",
+   "options": "Not Provisioned\nQueued\nProvisioning\nReady\nFailed\nOffboarded",
+   "read_only": 1
+  },
+  {
+   "fieldname": "provisioning_error",
+   "fieldtype": "Small Text",
+   "label": "Provisioning Error",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_activity",
+   "fieldtype": "Datetime",
+   "label": "Last Activity",
+   "read_only": 1
+  },
+  {
+   "fieldname": "archived_on",
+   "fieldtype": "Datetime",
+   "label": "Archived On",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_stats",
+   "fieldtype": "Section Break",
+   "label": "Cached Workspace Statistics"
+  },
+  {
+   "fieldname": "stat_unreconciled",
+   "fieldtype": "Int",
+   "label": "Unreconciled Bank Lines",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stat_drafts",
+   "fieldtype": "Int",
+   "label": "Draft Documents",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stat_overdue_invoices",
+   "fieldtype": "Int",
+   "label": "Overdue Sales Invoices",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stat_last_posting_date",
+   "fieldtype": "Date",
+   "label": "Last Posting Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_stats",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "stat_cash_and_bank",
+   "fieldtype": "Currency",
+   "label": "Cash and Bank",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stat_receivables",
+   "fieldtype": "Currency",
+   "label": "Receivables",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stat_payables",
+   "fieldtype": "Currency",
+   "label": "Payables",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stat_updated_on",
+   "fieldtype": "Datetime",
+   "label": "Statistics Updated On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_onboarding",
+   "fieldtype": "Section Break",
+   "label": "Onboarding"
+  },
+  {
+   "fieldname": "onboarding_checklist",
+   "fieldtype": "Table",
+   "label": "Onboarding Checklist",
+   "options": "Client Onboarding Item"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-20 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Noria Practice",
+ "name": "Client Business",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "business_name,kra_pin",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "business_name",
+ "track_changes": 1
+}

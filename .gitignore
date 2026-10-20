@@ -1,0 +1,26 @@
+# Secrets and local env — never commit
+.env
+.env.*
+!.env.example
+secrets/*
+!secrets/README.md
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.venv/
+
+# Frontend
+node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+*.tsbuildinfo
+
+# Local artefacts
+/backups/
+/measurements/raw/
+.DS_Store

@@ -1,0 +1,81 @@
+# Noria Ledger public edge.
+#
+# * Serves the React SPA (static files baked into this image).
+# * Proxies an ALLOW-LISTED set of /api paths to Frappe, always pinned to the hub
+#   site. Host and X-Frappe-Site-Name are overwritten so a caller can never
+#   select a client site by sending its own header: client sites are reachable
+#   only server-to-server from the hub broker.
+# * Everything else under /api is refused at the edge (defence in depth; the
+#   backend enforces authorization independently).
+#
+# Env: NORIA_SITE_ADDRESS (":80" for local HTTP, a domain for automatic HTTPS),
+#      NORIA_HUB_SITE. Caddy obtains certificates without an account email;
+#      add an `email` global option here if you want expiry notices.
+
+{
+	# Admin API stays on the container loopback (used by the healthcheck / metrics).
+	admin localhost:2019
+	servers {
+		metrics
+	}
+	log {
+		output stdout
+		format json
+	}
+}
+
+(security_headers) {
+	header {
+		# HSTS is ignored by browsers over plain HTTP, so it is safe to always send.
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+		-Server
+	}
+}
+
+{$NORIA_SITE_ADDRESS} {
+	import security_headers
+	encode zstd gzip
+
+	log {
+		output stdout
+		format json
+	}
+
+	@frappe_api {
+		path /api/method/login /api/method/logout
+		path /api/method/noria_practice.*
+		path /api/method/frappe.core.doctype.user.user.reset_password
+		path /api/method/frappe.core.doctype.user.user.update_password
+	}
+
+	handle @frappe_api {
+		request_body {
+			max_size 30MB
+		}
+		reverse_proxy backend:8000 {
+			header_up Host {$NORIA_HUB_SITE}
+			header_up X-Frappe-Site-Name {$NORIA_HUB_SITE}
+			header_up X-Forwarded-Host {host}
+			header_down -Server
+		}
+	}
+
+	handle /api/* {
+		respond `{"message":"Not found"}` 404
+	}
+
+	handle {
+		root * /srv
+		@assets path /assets/*
+		header @assets Cache-Control "public, max-age=31536000, immutable"
+		@html path / /index.html
+		header @html Cache-Control "no-cache"
+		try_files {path} /index.html
+		file_server
+	}
+}

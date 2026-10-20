@@ -1,0 +1,143 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "FIRM-.#####",
+ "creation": "2026-10-20 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "firm_name",
+  "firm_type",
+  "status",
+  "column_break_1",
+  "kra_pin",
+  "registration_number",
+  "email",
+  "phone",
+  "section_address",
+  "address",
+  "city",
+  "country",
+  "section_subscription",
+  "max_clients",
+  "modules"
+ ],
+ "fields": [
+  {
+   "fieldname": "firm_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Firm Name",
+   "reqd": 1
+  },
+  {
+   "default": "Accounting Firm",
+   "fieldname": "firm_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Firm Type",
+   "options": "Accounting Firm\nIndependent Accountant"
+  },
+  {
+   "default": "Active",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Active\nSuspended\nClosed"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "kra_pin",
+   "fieldtype": "Data",
+   "label": "KRA PIN"
+  },
+  {
+   "fieldname": "registration_number",
+   "fieldtype": "Data",
+   "label": "Registration Number"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "section_address",
+   "fieldtype": "Section Break",
+   "label": "Address"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City"
+  },
+  {
+   "default": "Kenya",
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "label": "Country",
+   "options": "Country"
+  },
+  {
+   "fieldname": "section_subscription",
+   "fieldtype": "Section Break",
+   "label": "Subscription"
+  },
+  {
+   "description": "0 = unlimited",
+   "fieldname": "max_clients",
+   "fieldtype": "Int",
+   "label": "Max Clients"
+  },
+  {
+   "fieldname": "modules",
+   "fieldtype": "Table",
+   "label": "Enabled Modules",
+   "options": "Firm Module"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-20 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Noria Practice",
+ "name": "Accounting Firm",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "firm_name,kra_pin",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "firm_name",
+ "track_changes": 1
+}

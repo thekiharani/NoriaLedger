@@ -1,0 +1,117 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:template_name",
+ "creation": "2026-10-20 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "template_name",
+  "task_type",
+  "frequency",
+  "due_days_after_period_end",
+  "default_priority",
+  "required_module",
+  "enabled",
+  "column_break_1",
+  "is_statutory",
+  "statutory_note",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "template_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Template Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "task_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Task Type",
+   "options": "\nBookkeeping\nBank Reconciliation\nTax Filing\nPayroll\nMonthly Report\nYear End\nOther",
+   "reqd": 1
+  },
+  {
+   "default": "Monthly",
+   "fieldname": "frequency",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Frequency",
+   "options": "Monthly\nQuarterly\nAnnual"
+  },
+  {
+   "default": "10",
+   "fieldname": "due_days_after_period_end",
+   "fieldtype": "Int",
+   "label": "Due Days After Period End"
+  },
+  {
+   "default": "Medium",
+   "fieldname": "default_priority",
+   "fieldtype": "Select",
+   "label": "Default Priority",
+   "options": "Low\nMedium\nHigh\nUrgent"
+  },
+  {
+   "fieldname": "required_module",
+   "fieldtype": "Link",
+   "label": "Required Module",
+   "options": "Noria Module"
+  },
+  {
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "is_statutory",
+   "fieldtype": "Check",
+   "label": "Is Statutory"
+  },
+  {
+   "description": "Source / verification note for statutory deadlines. Deadlines are configuration, not code.",
+   "fieldname": "statutory_note",
+   "fieldtype": "Small Text",
+   "label": "Statutory Note"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "label": "Description"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-20 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Noria Practice",
+ "name": "Task Template",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

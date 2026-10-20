@@ -1,0 +1,230 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "MR-.#####",
+ "creation": "2026-10-20 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "client",
+  "firm",
+  "period",
+  "from_date",
+  "to_date",
+  "column_break_1",
+  "status",
+  "prepared_by",
+  "reviewed_by",
+  "published_by",
+  "published_on",
+  "client_acknowledged_by",
+  "client_acknowledged_on",
+  "section_figures",
+  "currency",
+  "total_income",
+  "total_expense",
+  "net_profit",
+  "snapshot_taken_on",
+  "section_notes",
+  "accountant_notes",
+  "review_notes",
+  "section_snapshots",
+  "trial_balance",
+  "profit_and_loss",
+  "balance_sheet"
+ ],
+ "fields": [
+  {
+   "fieldname": "client",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Client",
+   "options": "Client Business",
+   "reqd": 1
+  },
+  {
+   "fieldname": "firm",
+   "fieldtype": "Link",
+   "label": "Firm",
+   "options": "Accounting Firm",
+   "reqd": 1
+  },
+  {
+   "description": "YYYY-MM",
+   "fieldname": "period",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Period",
+   "reqd": 1
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Draft\nIn Review\nApproved\nPublished\nWithdrawn"
+  },
+  {
+   "fieldname": "prepared_by",
+   "fieldtype": "Link",
+   "label": "Prepared By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reviewed_by",
+   "fieldtype": "Link",
+   "label": "Reviewed By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "published_by",
+   "fieldtype": "Link",
+   "label": "Published By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "published_on",
+   "fieldtype": "Datetime",
+   "label": "Published On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "client_acknowledged_by",
+   "fieldtype": "Link",
+   "label": "Client Acknowledged By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "client_acknowledged_on",
+   "fieldtype": "Datetime",
+   "label": "Client Acknowledged On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_figures",
+   "fieldtype": "Section Break",
+   "label": "Headline Figures (from ERPNext)"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_income",
+   "fieldtype": "Currency",
+   "label": "Total Income",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_expense",
+   "fieldtype": "Currency",
+   "label": "Total Expense",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "net_profit",
+   "fieldtype": "Currency",
+   "label": "Net Profit",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "snapshot_taken_on",
+   "fieldtype": "Datetime",
+   "label": "Snapshot Taken On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_notes",
+   "fieldtype": "Section Break",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "accountant_notes",
+   "fieldtype": "Text",
+   "label": "Accountant Notes"
+  },
+  {
+   "fieldname": "review_notes",
+   "fieldtype": "Text",
+   "label": "Review Notes"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_snapshots",
+   "fieldtype": "Section Break",
+   "label": "Report Snapshots"
+  },
+  {
+   "fieldname": "trial_balance",
+   "fieldtype": "JSON",
+   "label": "Trial Balance",
+   "read_only": 1
+  },
+  {
+   "fieldname": "profit_and_loss",
+   "fieldtype": "JSON",
+   "label": "Profit And Loss",
+   "read_only": 1
+  },
+  {
+   "fieldname": "balance_sheet",
+   "fieldtype": "JSON",
+   "label": "Balance Sheet",
+   "read_only": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-20 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Noria Practice",
+ "name": "Monthly Report",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
