@@ -1,0 +1,33 @@
+## docker images
+noria-ledger/edge:dev                     58a2597160f3   93.9MB
+noria-ledger/backend:dev                  d7413e382329   4.39GB
+mirror.gcr.io/frappe/erpnext:v16.51.1     85b63c68a1e7   4.4GB
+mirror.gcr.io/library/mariadb:11.8        f16d7a344413   458MB
+mirror.gcr.io/oven/bun:1.4-alpine         629e17411f1f   145MB
+mirror.gcr.io/library/redis:8.10-trixie   2c2dff791878   213MB
+mirror.gcr.io/library/caddy:2.11-alpine   d8542f48d34a   93.1MB
+mirror.gcr.io/frappe/erpnext:v16.51.1     85b63c68a1e7        4.4GB          986MB        
+mirror.gcr.io/library/caddy:2.11-alpine   d8542f48d34a       93.1MB         25.2MB        
+mirror.gcr.io/library/mariadb:11.8        f16d7a344413        458MB          108MB   U    
+mirror.gcr.io/library/redis:8.10-trixie   2c2dff791878        213MB         57.6MB   U    
+mirror.gcr.io/oven/bun:1.4-alpine         629e17411f1f        145MB         47.5MB        
+noria-ledger/backend:dev                  d7413e382329       4.39GB          972MB   U    
+noria-ledger/edge:dev                     58a2597160f3       93.9MB         25.1MB   U    
+
+## backend layers (top 6)
+770kB	RUN |1 NORIA_VERSION=dev /bin/sh -c site_pac…
+258kB	COPY --chown=frappe:0 apps/noria_ledger apps…
+504kB	COPY --chown=frappe:0 apps/noria_practice ap…
+4.1kB	WORKDIR /home/frappe/frappe-bench
+0B	USER frappe
+0B	LABEL org.opencontainers.image.title=noria-l…
+
+## edge layers
+4.1kB	RUN |1 NORIA_VERSION=dev /bin/sh -c NORIA_SI…
+823kB	COPY /src/dist /srv # buildkit
+16.4kB	COPY infrastructure/caddy/Caddyfile /etc/cad…
+0B	LABEL org.opencontainers.image.title=noria-l…
+0B	ARG NORIA_VERSION=0.0.0-dev
+0B	CMD ["caddy" "run" "--config" "/etc/caddy/Ca…
+4.1kB	WORKDIR /srv
+0B	EXPOSE map[2019/tcp:{}]

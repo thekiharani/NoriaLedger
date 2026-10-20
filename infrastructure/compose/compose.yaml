@@ -126,6 +126,23 @@ services:
       timeout: 5s
       retries: 5
 
+  # Separate gunicorn pool for client-site traffic (hub -> client site broker
+  # calls). Sharing one pool deadlocks under load: hub threads waiting on broker
+  # calls would occupy the threads the client-site requests need. Not routed by
+  # the public edge.
+  backend-ledger:
+    <<: *backend_defaults
+    environment:
+      GUNICORN_THREADS: ${GUNICORN_LEDGER_THREADS:-4}
+      GUNICORN_WORKERS: ${GUNICORN_LEDGER_WORKERS:-2}
+      GUNICORN_TIMEOUT: ${GUNICORN_TIMEOUT:-120}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -H \"Host: ${NORIA_HUB_SITE}\" http://127.0.0.1:8000/api/method/ping || exit 1"]
+      start_period: 40s
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
   websocket:
     <<: [*depends_on_configurator, *backend_image]
     command: ["node", "/home/frappe/frappe-bench/apps/frappe/socketio.js"]

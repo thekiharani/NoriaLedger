@@ -111,7 +111,7 @@ cmd_create_hub() {
 cmd_configure_hub() {
   bench_exec --site "$NORIA_HUB_SITE" set-config noria_client_site_suffix "${NORIA_CLIENT_SITE_SUFFIX}"
   bench_exec --site "$NORIA_HUB_SITE" set-config -p noria_allow_firm_signup "${NORIA_ALLOW_FIRM_SIGNUP:-0}"
-  bench_exec --site "$NORIA_HUB_SITE" set-config noria_client_site_base_url "http://backend:8000"
+  bench_exec --site "$NORIA_HUB_SITE" set-config noria_client_site_base_url "http://backend-ledger:8000"
   bench_exec --site "$NORIA_HUB_SITE" enable-scheduler
   if [[ "$NORIA_ENV" != "production" ]]; then
     bench_exec --site "$NORIA_HUB_SITE" set-config -p allow_tests 1

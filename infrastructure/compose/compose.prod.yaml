@@ -14,6 +14,11 @@ services:
       resources:
         limits:
           memory: 2g
+  backend-ledger:
+    deploy:
+      resources:
+        limits:
+          memory: 2g
   queue-short:
     <<: *limits
   queue-long:

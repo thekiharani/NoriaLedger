@@ -4,8 +4,9 @@ The browser never talks to client sites. After `authz` has authorised the user,
 the hub calls the client site's `noria_ledger.api.*` endpoint with that site's
 service credentials, forwarding the acting user for attribution.
 
-Client sites are addressed through the internal backend (`noria_client_site_base_url`,
-default http://backend:8000) with the Host / X-Frappe-Site-Name header naming the
+Client sites are addressed through the internal `backend-ledger` gunicorn pool
+(`noria_client_site_base_url`, default http://backend-ledger:8000; a pool separate
+from the hub's avoids thread-starvation deadlocks) with the Host / X-Frappe-Site-Name header naming the
 site; they are not routed by the public edge.
 """
 
@@ -42,7 +43,7 @@ def call(client: str, method: str, payload: dict | None = None, acting_user: str
 	if not method.replace(".", "").replace("_", "").isalnum():
 		frappe.throw(_("Invalid method"))
 	creds = _site_credentials(client)
-	base_url = (frappe.conf.get("noria_client_site_base_url") or "http://backend:8000").rstrip("/")
+	base_url = (frappe.conf.get("noria_client_site_base_url") or "http://backend-ledger:8000").rstrip("/")
 	request_id = getattr(frappe.local, "noria_request_id", None) or uuid.uuid4().hex
 	session = requests.Session()
 	session.trust_env = False  # internal call: never route through HTTP(S)_PROXY

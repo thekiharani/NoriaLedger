@@ -1,0 +1,312 @@
+{
+  "environment": {
+    "cpus": 4,
+    "platform": "Linux-6.18.44-fc-v139-x86_64-with-glibc2.39",
+    "python": "3.13.16",
+    "users": 4,
+    "clients_targeted": 6,
+    "duration_s": 15
+  },
+  "scenarios": {
+    "dashboard": [
+      {
+        "concurrency": 1,
+        "requests": 1033,
+        "rps": 68.83,
+        "error_rate": 0.0,
+        "p50_ms": 14.2,
+        "p95_ms": 17.7,
+        "p99_ms": 22.0,
+        "mean_ms": 14.5,
+        "sample_errors": []
+      },
+      {
+        "concurrency": 5,
+        "requests": 2521,
+        "rps": 167.78,
+        "error_rate": 0.0,
+        "p50_ms": 29.1,
+        "p95_ms": 40.9,
+        "p99_ms": 47.8,
+        "mean_ms": 29.8,
+        "sample_errors": []
+      },
+      {
+        "concurrency": 10,
+        "requests": 2510,
+        "rps": 166.75,
+        "error_rate": 0.0,
+        "p50_ms": 56.3,
+        "p95_ms": 92.1,
+        "p99_ms": 106.9,
+        "mean_ms": 59.9,
+        "sample_errors": []
+      },
+      {
+        "concurrency": 25,
+        "requests": 2628,
+        "rps": 173.76,
+        "error_rate": 0.0,
+        "p50_ms": 142.8,
+        "p95_ms": 172.2,
+        "p99_ms": 186.0,
+        "mean_ms": 143.2,
+        "sample_errors": []
+      }
+    ],
+    "client_list": [
+      {
+        "concurrency": 1,
+        "requests": 490,
+        "rps": 32.62,
+        "error_rate": 0.0,
+        "p50_ms": 30.4,
+        "p95_ms": 38.0,
+        "p99_ms": 41.9,
+        "mean_ms": 30.6,
+        "sample_errors": []
+      },
+      {
+        "concurrency": 5,
+        "requests": 1712,
+        "rps": 113.89,
+        "error_rate": 0.0,
+        "p50_ms": 40.7,
+        "p95_ms": 72.8,
+        "p99_ms": 84.7,
+        "mean_ms": 43.8,
+        "sample_errors": []
+      },
+      {
+        "concurrency": 10,
+        "requests": 1799,
+        "rps": 119.37,
+        "error_rate": 0.0,
+        "p50_ms": 78.1,
+        "p95_ms": 133.7,
+        "p99_ms": 154.7,
+        "mean_ms": 83.6,
+        "sample_errors": []
+      },
+      {
+        "concurrency": 25,
+        "requests": 1747,
+        "rps": 114.92,
+        "error_rate": 0.0,
+        "p50_ms": 215.6,
+        "p95_ms": 274.9,
+        "p99_ms": 307.4,
+        "mean_ms": 216.0,
+        "sample_errors": []
+      }
+    ],
+    "ledger_overview": [
+      {
+        "concurrency": 1,
+        "requests": 426,
+        "rps": 28.38,
+        "error_rate": 0.0,
+        "p50_ms": 35.1,
+        "p95_ms": 41.1,
+        "p99_ms": 44.6,
+        "mean_ms": 35.2,
+        "sample_errors": []
+      },
+      {
+        "concurrency": 5,
+        "requests": 1802,
+        "rps": 59.6,
+        "error_rate": 0.5022,
+        "p50_ms": 61.6,
+        "p95_ms": 84.6,
+        "p99_ms": 93.1,
+        "mean_ms": 62.7,
+        "sample_errors": [
+          "HTTPError: HTTP Error 403: Forbidden"
+        ]
+      },
+      {
+        "concurrency": 10,
+        "requests": 1845,
+        "rps": 60.34,
+        "error_rate": 0.5073,
+        "p50_ms": 107.7,
+        "p95_ms": 170.3,
+        "p99_ms": 199.7,
+        "mean_ms": 109.9,
+        "sample_errors": [
+          "HTTPError: HTTP Error 403: Forbidden"
+        ]
+      },
+      {
+        "concurrency": 25,
+        "requests": 1972,
+        "rps": 65.45,
+        "error_rate": 0.4949,
+        "p50_ms": 127.2,
+        "p95_ms": 420.3,
+        "p99_ms": 461.9,
+        "mean_ms": 215.4,
+        "sample_errors": [
+          "HTTPError: HTTP Error 403: Forbidden"
+        ]
+      }
+    ],
+    "journal_list": [
+      {
+        "concurrency": 1,
+        "requests": 659,
+        "rps": 43.89,
+        "error_rate": 0.0,
+        "p50_ms": 22.4,
+        "p95_ms": 27.1,
+        "p99_ms": 33.3,
+        "mean_ms": 22.8,
+        "sample_errors": []
+      },
+      {
+        "concurrency": 5,
+        "requests": 2082,
+        "rps": 74.01,
+        "error_rate": 0.4654,
+        "p50_ms": 47.4,
+        "p95_ms": 64.1,
+        "p99_ms": 73.3,
+        "mean_ms": 48.0,
+        "sample_errors": [
+          "HTTPError: HTTP Error 403: Forbidden"
+        ]
+      },
+      {
+        "concurrency": 10,
+        "requests": 2255,
+        "rps": 72.67,
+        "error_rate": 0.5149,
+        "p50_ms": 82.5,
+        "p95_ms": 119.6,
+        "p99_ms": 149.9,
+        "mean_ms": 85.1,
+        "sample_errors": [
+          "HTTPError: HTTP Error 403: Forbidden"
+        ]
+      },
+      {
+        "concurrency": 25,
+        "requests": 2272,
+        "rps": 73.92,
+        "error_rate": 0.507,
+        "p50_ms": 180.5,
+        "p95_ms": 237.1,
+        "p99_ms": 259.9,
+        "mean_ms": 183.0,
+        "sample_errors": [
+          "HTTPError: HTTP Error 403: Forbidden"
+        ]
+      }
+    ],
+    "trial_balance": [
+      {
+        "concurrency": 1,
+        "requests": 251,
+        "rps": 16.72,
+        "error_rate": 0.0,
+        "p50_ms": 58.7,
+        "p95_ms": 69.0,
+        "p99_ms": 109.3,
+        "mean_ms": 59.8,
+        "sample_errors": []
+      },
+      {
+        "concurrency": 5,
+        "requests": 1109,
+        "rps": 37.01,
+        "error_rate": 0.4986,
+        "p50_ms": 110.1,
+        "p95_ms": 155.2,
+        "p99_ms": 179.1,
+        "mean_ms": 112.2,
+        "sample_errors": [
+          "HTTPError: HTTP Error 403: Forbidden"
+        ]
+      },
+      {
+        "concurrency": 10,
+        "requests": 1424,
+        "rps": 42.19,
+        "error_rate": 0.552,
+        "p50_ms": 174.0,
+        "p95_ms": 253.7,
+        "p99_ms": 304.4,
+        "mean_ms": 178.6,
+        "sample_errors": [
+          "HTTPError: HTTP Error 403: Forbidden"
+        ]
+      },
+      {
+        "concurrency": 25,
+        "requests": 1379,
+        "rps": 44.05,
+        "error_rate": 0.512,
+        "p50_ms": 328.2,
+        "p95_ms": 466.4,
+        "p99_ms": 508.4,
+        "mean_ms": 334.9,
+        "sample_errors": [
+          "HTTPError: HTTP Error 403: Forbidden"
+        ]
+      }
+    ],
+    "profit_and_loss": [
+      {
+        "concurrency": 1,
+        "requests": 292,
+        "rps": 19.46,
+        "error_rate": 0.0,
+        "p50_ms": 51.0,
+        "p95_ms": 62.6,
+        "p99_ms": 70.6,
+        "mean_ms": 51.4,
+        "sample_errors": []
+      },
+      {
+        "concurrency": 5,
+        "requests": 1306,
+        "rps": 44.24,
+        "error_rate": 0.4893,
+        "p50_ms": 92.9,
+        "p95_ms": 123.2,
+        "p99_ms": 139.3,
+        "mean_ms": 93.7,
+        "sample_errors": [
+          "HTTPError: HTTP Error 403: Forbidden"
+        ]
+      },
+      {
+        "concurrency": 10,
+        "requests": 1569,
+        "rps": 48.64,
+        "error_rate": 0.5322,
+        "p50_ms": 148.2,
+        "p95_ms": 215.0,
+        "p99_ms": 259.1,
+        "mean_ms": 151.5,
+        "sample_errors": [
+          "HTTPError: HTTP Error 403: Forbidden"
+        ]
+      },
+      {
+        "concurrency": 25,
+        "requests": 1278,
+        "rps": 42.6,
+        "error_rate": 0.489,
+        "p50_ms": 337.2,
+        "p95_ms": 520.5,
+        "p99_ms": 575.3,
+        "mean_ms": 345.0,
+        "sample_errors": [
+          "HTTPError: HTTP Error 403: Forbidden"
+        ]
+      }
+    ]
+  }
+}
