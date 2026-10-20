@@ -227,6 +227,13 @@ class TestEntitlements(PracticeTestCase):
 		self.assertIn("core_accounting", modules)
 		self.assertNotIn("bank_reconciliation", modules)
 
+	def test_bulk_modules_match_single_lookup(self):
+		as_user(self.admin_a)
+		pairs = [(self.client_a, self.firm_a), (self.client_a2, self.firm_a)]
+		bulk = authz.client_modules_bulk(pairs)
+		for client, firm in pairs:
+			self.assertEqual(bulk[client], authz.client_modules(client, firm))
+
 	def test_services_outside_subscription_rejected(self):
 		as_user(self.admin_b)
 		with self.assertRaises(frappe.ValidationError):

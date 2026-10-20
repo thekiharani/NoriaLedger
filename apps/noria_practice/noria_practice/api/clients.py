@@ -75,6 +75,7 @@ def list_clients(search: str | None = None, status: str | None = None, firm: str
 			{"clients": [r.name for r in rows] or [""]},
 		)
 	)
+	modules = authz.client_modules_bulk([(r.name, access[r.name].firm) for r in rows])
 	result = []
 	for r in rows:
 		a = access[r.name]
@@ -93,7 +94,7 @@ def list_clients(search: str | None = None, status: str | None = None, firm: str
 				"access_level": a.level,
 				"team": team,
 				"open_tasks": open_tasks.get(r.name, 0),
-				"modules": sorted(authz.client_modules(r.name, a.firm)),
+				"modules": sorted(modules[r.name]),
 			}
 		)
 	return result

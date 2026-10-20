@@ -1,69 +1,69 @@
 {
-  "run": "6beab0",
+  "run": "56c5e8",
   "ok": true,
-  "client": "CLT-00005",
-  "provision_seconds": 130.7,
+  "client": "CLT-00006",
+  "provision_seconds": 115.6,
   "period": "2026-09",
   "steps": [
     {
       "step": "0. firm sign-up + login",
       "ok": true,
-      "seconds": 1.01
+      "seconds": 0.88
     },
     {
       "step": "1. create client (isolated ERPNext site provisioned)",
       "ok": true,
-      "seconds": 130.79
+      "seconds": 115.75
     },
     {
       "step": "2. configure chart of accounts",
       "ok": true,
-      "seconds": 0.34
+      "seconds": 0.68
     },
     {
       "step": "3. record income and expenses",
       "ok": true,
-      "seconds": 2.41
+      "seconds": 2.86
     },
     {
       "step": "4. import bank statement",
       "ok": true,
-      "seconds": 0.14
+      "seconds": 0.22
     },
     {
       "step": "5. reconcile transactions",
       "ok": true,
-      "seconds": 0.29
+      "seconds": 0.39
     },
     {
       "step": "6. trial balance",
       "ok": true,
-      "seconds": 0.17
+      "seconds": 0.73
     },
     {
       "step": "7. profit and loss",
       "ok": true,
-      "seconds": 0.08
+      "seconds": 0.16
     },
     {
       "step": "8. prepare monthly report",
       "ok": true,
-      "seconds": 0.13
+      "seconds": 0.14
     },
     {
       "step": "9. submit for internal review + approve",
       "ok": true,
-      "seconds": 0.28
+      "seconds": 0.25
     },
     {
       "step": "10. publish to client portal + client approval",
       "ok": true,
-      "seconds": 0.37
+      "seconds": 0.3
     },
     {
       "step": "11. isolation: another firm cannot see this client",
       "ok": true,
-      "seconds": 0.29
+      "seconds": 0.24
     }
   ]
 }

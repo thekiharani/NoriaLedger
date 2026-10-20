@@ -199,6 +199,43 @@ def client_modules(client: str, firm: str) -> set[str]:
 	return available & (services | core) if services else available
 
 
+def client_modules_bulk(pairs: list[tuple[str, str]]) -> dict[str, set[str]]:
+	"""client_modules for many (client, firm) pairs with a constant number of queries."""
+	if not pairs:
+		return {}
+	core = set(frappe.get_all("Noria Module", filters={"is_core": 1}, pluck="name"))
+	firms = {f for _c, f in pairs}
+	firm_mods = {f: set(core) for f in firms}
+	for row in frappe.get_all(
+		"Firm Module",
+		filters={"parent": ["in", list(firms)], "parenttype": "Accounting Firm", "enabled": 1},
+		fields=["parent", "module"],
+	):
+		firm_mods[row.parent].add(row.module)
+	engagements = frappe.get_all(
+		"Client Engagement",
+		filters={"client": ["in", [c for c, _f in pairs]], "firm": ["in", list(firms)], "status": "Active"},
+		fields=["name", "client", "firm"],
+	)
+	eng_by_pair = {(e.client, e.firm): e.name for e in engagements}
+	services: dict[str, set[str]] = {}
+	for row in frappe.get_all(
+		"Engagement Service",
+		filters={"parent": ["in", [e.name for e in engagements] or [""]], "parenttype": "Client Engagement"},
+		fields=["parent", "module"],
+	):
+		services.setdefault(row.parent, set()).add(row.module)
+	result = {}
+	for client, firm in pairs:
+		eng = eng_by_pair.get((client, firm))
+		if not eng:
+			result[client] = set()
+			continue
+		svc = services.get(eng)
+		result[client] = firm_mods[firm] & (svc | core) if svc else firm_mods[firm]
+	return result
+
+
 def require_module(access: ClientAccess, module: str):
 	if module not in client_modules(access.client, access.firm):
 		frappe.throw(

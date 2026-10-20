@@ -55,3 +55,17 @@ def register_benchmark_client(firm: str, site_name: str, service_user: str, api_
 	).insert(ignore_permissions=True)
 	frappe.db.commit()
 	return client.name
+
+
+def remove_benchmark_clients() -> int:
+	"""Delete hub records created by register_benchmark_client (non-production only)."""
+	if frappe.conf.get("noria_environment") == "production":
+		frappe.throw("Not available in production")
+	clients = frappe.get_all("Client Business", filters={"business_name": ["like", "Benchmark bench-%"]}, pluck="name")
+	for client in clients:
+		for doctype in ("Client Site", "Client Engagement", "Client Assignment", "Practice Task", "Noria Audit Event"):
+			for name in frappe.get_all(doctype, filters={"client": client}, pluck="name"):
+				frappe.delete_doc(doctype, name, ignore_permissions=True, force=True)
+		frappe.delete_doc("Client Business", client, ignore_permissions=True, force=True)
+	frappe.db.commit()
+	return len(clients)

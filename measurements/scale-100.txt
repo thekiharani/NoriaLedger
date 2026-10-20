@@ -1,0 +1,32 @@
+## 100 client sites (after DB restart + load run) — 2026-10-20T16:43:53Z
+client sites: 100
+
+### containers
+admin-frontend-1	0.00%	4.637MiB / 15.72GiB
+backend-1	0.01%	278.3MiB / 2GiB
+backend-ledger-1	0.01%	714.4MiB / 2GiB
+backup-cron-1	0.00%	728KiB / 15.72GiB
+db-1	0.19%	905.1MiB / 2GiB
+edge-1	0.00%	17.83MiB / 15.72GiB
+provisioner-1	0.00%	46.96MiB / 1GiB
+queue-long-1	0.00%	79.79MiB / 1GiB
+queue-short-1	0.00%	71.23MiB / 1GiB
+redis-cache-1	0.22%	148.3MiB / 15.72GiB
+redis-queue-1	0.23%	8.152MiB / 15.72GiB
+scheduler-1	0.00%	116.8MiB / 512MiB
+websocket-1	0.00%	22.51MiB / 15.72GiB
+
+### database
+schemas: 101  tables: 76582  data+index MB: 4619
+Max_used_connections	17
+Open_files	22
+Open_tables	2000
+Opened_tables	80288
+Threads_connected	1
+innodb_buffer_pool_size	536870912
+max_connections	300
+table_definition_cache	400
+table_open_cache	2000
+on-disk: 11G
+
+### queues

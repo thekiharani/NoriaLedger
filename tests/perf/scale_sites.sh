@@ -2,6 +2,7 @@
 # Scale a NON-PRODUCTION stack to N benchmark client sites for measurements.
 #
 #   tests/perf/scale_sites.sh <total-benchmark-sites>
+#   tests/perf/scale_sites.sh --remove      # drop all bench-* sites + hub records
 #
 # Sites are cloned from one bootstrapped template (bench new-site --source-sql),
 # then each gets its own rotated service-user secret and is attached to the hub
@@ -12,11 +13,22 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 N="$ROOT/infrastructure/scripts/noria.sh"
 set -a; source "${NORIA_ENV_FILE:-$ROOT/.env}"; set +a
 [[ "${NORIA_ENV:-development}" != "production" ]] || { echo "refusing in production"; exit 1; }
-total="${1:?usage: scale_sites.sh <n>}"
+total="${1:?usage: scale_sites.sh <n>|--remove}"
 suffix="${NORIA_CLIENT_SITE_SUFFIX:-ledger.internal}"
 template="bench-template.$suffix"
 tsql="/home/frappe/frappe-bench/sites/bench-template.sql.gz"
 bexec() { "$N" compose exec -T backend "$@"; }
+
+if [[ "$total" == "--remove" ]]; then
+  sites="$(bexec bash -c "ls sites | grep -E '^bench-([0-9]+|template)\\.'" | tr -d '\r')"
+  # shellcheck disable=SC2086
+  "$N" compose run --rm --no-deps -T provisioner bash -euc '
+    root="$(cat "$NORIA_DB_ROOT_PASSWORD_FILE")"
+    for s in "$@"; do bench drop-site "$s" --db-root-password "$root" --no-backup --force >/dev/null 2>&1 && echo "dropped $s"; done
+    rm -rf archived/sites/bench-* sites/bench-template.sql.gz' _ $sites | grep -c dropped
+  bexec bench --site "$NORIA_HUB_SITE" execute noria_practice.ops.remove_benchmark_clients
+  exit 0
+fi
 
 if ! bexec bash -c "gzip -t $tsql" 2>/dev/null; then
   if ! bexec test -d "sites/$template"; then

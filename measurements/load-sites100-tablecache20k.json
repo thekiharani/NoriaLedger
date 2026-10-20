@@ -1,0 +1,60 @@
+{
+  "environment": {
+    "cpus": 4,
+    "platform": "Linux-6.18.44-fc-v139-x86_64-with-glibc2.39",
+    "python": "3.13.16",
+    "users": 4,
+    "clients_targeted": 96,
+    "duration_s": 15
+  },
+  "scenarios": {
+    "ledger_overview": [
+      {
+        "concurrency": 1,
+        "requests": 386,
+        "rps": 25.72,
+        "error_rate": 0.0,
+        "p50_ms": 34.2,
+        "p95_ms": 59.2,
+        "p99_ms": 65.7,
+        "mean_ms": 38.9,
+        "sample_errors": []
+      },
+      {
+        "concurrency": 10,
+        "requests": 1162,
+        "rps": 77.1,
+        "error_rate": 0.0,
+        "p50_ms": 127.1,
+        "p95_ms": 208.6,
+        "p99_ms": 246.9,
+        "mean_ms": 129.3,
+        "sample_errors": []
+      }
+    ],
+    "trial_balance": [
+      {
+        "concurrency": 1,
+        "requests": 199,
+        "rps": 13.17,
+        "error_rate": 0.0,
+        "p50_ms": 72.1,
+        "p95_ms": 95.3,
+        "p99_ms": 312.0,
+        "mean_ms": 75.9,
+        "sample_errors": []
+      },
+      {
+        "concurrency": 10,
+        "requests": 727,
+        "rps": 47.89,
+        "error_rate": 0.0,
+        "p50_ms": 198.7,
+        "p95_ms": 319.2,
+        "p99_ms": 370.7,
+        "mean_ms": 207.7,
+        "sample_errors": []
+      }
+    ]
+  }
+}

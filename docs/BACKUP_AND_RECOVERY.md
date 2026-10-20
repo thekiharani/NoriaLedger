@@ -55,3 +55,8 @@ after the backup must be re-attached).
 provisioner. **Databases are never dropped automatically.** Deletion after the retention period is a manual operator
 procedure: final backup → `bench drop-site <site> --no-backup` (archives the site directory) → remove archives
 after confirmation → record it in the audit log.
+
+Lesson from the 100-site benchmark: before dropping sites, stop their scheduler (`bench --site <site>
+disable-scheduler`) and let their queued jobs drain. Jobs already queued for a dropped site fail, and a large backlog
+makes Frappe refuse new jobs (`QueueOverloaded`, which also aborts `bench migrate`). If jobs were purged from Redis
+by hand, stale document locks under `sites/<site>/locks/` can block the next migration until they expire.

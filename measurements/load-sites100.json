@@ -1,0 +1,108 @@
+{
+  "environment": {
+    "cpus": 4,
+    "platform": "Linux-6.18.44-fc-v139-x86_64-with-glibc2.39",
+    "python": "3.13.16",
+    "users": 4,
+    "clients_targeted": 96,
+    "duration_s": 15
+  },
+  "scenarios": {
+    "dashboard": [
+      {
+        "concurrency": 1,
+        "requests": 743,
+        "rps": 49.5,
+        "error_rate": 0.0,
+        "p50_ms": 19.1,
+        "p95_ms": 26.4,
+        "p99_ms": 28.9,
+        "mean_ms": 20.2,
+        "sample_errors": []
+      },
+      {
+        "concurrency": 10,
+        "requests": 2281,
+        "rps": 151.52,
+        "error_rate": 0.0,
+        "p50_ms": 61.6,
+        "p95_ms": 99.5,
+        "p99_ms": 125.7,
+        "mean_ms": 65.9,
+        "sample_errors": []
+      }
+    ],
+    "client_list": [
+      {
+        "concurrency": 1,
+        "requests": 757,
+        "rps": 50.42,
+        "error_rate": 0.0,
+        "p50_ms": 19.0,
+        "p95_ms": 25.7,
+        "p99_ms": 28.6,
+        "mean_ms": 19.8,
+        "sample_errors": []
+      },
+      {
+        "concurrency": 10,
+        "requests": 2394,
+        "rps": 159.11,
+        "error_rate": 0.0,
+        "p50_ms": 59.3,
+        "p95_ms": 95.0,
+        "p99_ms": 108.3,
+        "mean_ms": 62.7,
+        "sample_errors": []
+      }
+    ],
+    "ledger_overview": [
+      {
+        "concurrency": 1,
+        "requests": 364,
+        "rps": 24.21,
+        "error_rate": 0.0,
+        "p50_ms": 37.5,
+        "p95_ms": 60.0,
+        "p99_ms": 78.4,
+        "mean_ms": 41.3,
+        "sample_errors": []
+      },
+      {
+        "concurrency": 10,
+        "requests": 1332,
+        "rps": 88.36,
+        "error_rate": 0.0,
+        "p50_ms": 107.1,
+        "p95_ms": 169.8,
+        "p99_ms": 216.7,
+        "mean_ms": 112.8,
+        "sample_errors": []
+      }
+    ],
+    "trial_balance": [
+      {
+        "concurrency": 1,
+        "requests": 78,
+        "rps": 5.17,
+        "error_rate": 0.0,
+        "p50_ms": 95.2,
+        "p95_ms": 340.2,
+        "p99_ms": 531.8,
+        "mean_ms": 193.6,
+        "sample_errors": []
+      },
+      {
+        "concurrency": 10,
+        "requests": 672,
+        "rps": 43.85,
+        "error_rate": 0.0,
+        "p50_ms": 205.8,
+        "p95_ms": 352.1,
+        "p99_ms": 1009.2,
+        "mean_ms": 225.0,
+        "sample_errors": []
+      }
+    ]
+  }
+}

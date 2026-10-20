@@ -30,6 +30,7 @@ def bootstrap(
 	from noria_ledger.install import apply_configuration
 
 	apply_configuration()
+	reset_scheduler_clock()
 	credentials = ensure_service_user(service_user or f"noria-service@{frappe.local.site}")
 	frappe.db.commit()
 	return {
@@ -64,6 +65,23 @@ def run_setup_wizard(company_name, company_abbr, fy_start_date, chart_of_account
 	)
 	if not frappe.is_setup_complete():
 		frappe.throw(f"ERPNext setup wizard did not complete: {result}")
+
+
+def reset_scheduler_clock():
+	"""Make scheduled jobs due relative to the site's final time zone.
+
+	`bench new-site` creates Scheduled Job Types while the site still uses
+	Frappe's default time zone; the setup wizard then switches it to
+	Africa/Nairobi, which leaves their creation timestamps hours in the future
+	and delays every scheduled job (overdue status updates, auto-repeat,
+	depreciation...) until local time catches up. Anchor never-run jobs to now.
+	"""
+	from frappe.utils import now_datetime
+
+	frappe.db.sql(
+		"update `tabScheduled Job Type` set last_execution=%s where last_execution is null",
+		now_datetime(),
+	)
 
 
 def ensure_service_user(email: str) -> dict:

@@ -1,0 +1,3 @@
+migrate bench-001: 9.156s
+migrate bench-020: 7.538s
+migrate savanna-coffee-roasters-ltd-clt-00001: 7.359s

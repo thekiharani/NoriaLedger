@@ -1,0 +1,12 @@
+db-1 0.02% queue-long-1 0.00% queue-short-1 0.00% scheduler-1 0.00% 
+db-1 0.04% queue-long-1 0.00% queue-short-1 0.00% scheduler-1 0.00% 
+db-1 4.45% queue-long-1 0.00% queue-short-1 0.00% scheduler-1 0.00% 
+db-1 0.03% queue-long-1 0.00% queue-short-1 0.00% scheduler-1 0.00% 
+db-1 0.01% queue-long-1 0.00% queue-short-1 0.00% scheduler-1 0.00% 
+db-1 0.01% queue-long-1 0.00% queue-short-1 0.00% scheduler-1 0.00% 
+db-1 0.01% queue-long-1 0.00% queue-short-1 0.00% scheduler-1 0.00% 
+db-1 4.28% queue-long-1 0.00% queue-short-1 0.00% scheduler-1 0.00% 
+db-1 0.01% queue-long-1 0.00% queue-short-1 0.00% scheduler-1 0.00% 
+db-1 0.95% queue-long-1 72.17% queue-short-1 35.61% scheduler-1 0.00% 
+db-1 0.04% queue-long-1 0.00% queue-short-1 0.00% scheduler-1 0.00% 
+db-1 0.03% queue-long-1 0.00% queue-short-1 0.00% scheduler-1 0.00% 

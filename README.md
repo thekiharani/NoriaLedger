@@ -33,6 +33,7 @@ open http://localhost:8080        # demo users: docs/INSTALLATION.md
 | [docs/KENYA_COMPLIANCE.md](docs/KENYA_COMPLIANCE.md) | Tax/eTIMS/M-PESA status (no automatic KRA filing) |
 | [docs/TESTING.md](docs/TESTING.md) | Test suites and recorded results |
 | [docs/KNOWN_LIMITATIONS.md](docs/KNOWN_LIMITATIONS.md) | What is not built yet, and the roadmap |
+| [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md) | Milestone 1 acceptance criteria → evidence |
 
 ## Status
 

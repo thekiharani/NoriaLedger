@@ -1,0 +1,6 @@
+17:12:52 rq:queue:home-frappe-frappe-bench:default=497 
+17:13:12 rq:queue:home-frappe-frappe-bench:default=437 
+17:13:33 rq:queue:home-frappe-frappe-bench:default=378 
+17:13:53 rq:queue:home-frappe-frappe-bench:default=319 
+17:14:13 rq:queue:home-frappe-frappe-bench:default=259 
+17:14:33 rq:queue:home-frappe-frappe-bench:default=199 

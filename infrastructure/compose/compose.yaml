@@ -48,6 +48,12 @@ services:
       - --skip-character-set-client-handshake
       - --innodb-buffer-pool-size=${DB_INNODB_BUFFER_POOL_SIZE:-512M}
       - --max-connections=${DB_MAX_CONNECTIONS:-300}
+      # Each client site adds ~760 tables; size the table caches for the fleet
+      # (see docs/OPTIMIZATION_REPORT.md, "table cache" experiment).
+      - --table-open-cache=${DB_TABLE_OPEN_CACHE:-10000}
+      - --table-definition-cache=${DB_TABLE_DEFINITION_CACHE:-10000}
+      # Must exceed ~2 x table_open_cache or MariaDB silently shrinks the cache.
+      - --open-files-limit=${DB_OPEN_FILES_LIMIT:-65535}
     environment:
       MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MARIADB_AUTO_UPGRADE: "1"

@@ -42,7 +42,7 @@ Status as of Milestone 1 (2026-10-20). "Implemented" items are covered by the te
 | Central identity (OIDC) | hub-brokered sessions only | an OIDC provider can front the hub later |
 | Template-based provisioning | standard provisioning takes ~130 s per client; cloning from a pre-installed template measured ~16 s per site | needs a "pre-setup-wizard" template + setup wizard to stay correct per client |
 | Client ownership transfer between firms | additional engagements require a platform operator (`admin.grant_engagement`) | portal-owner-driven consent flow planned |
-| Frontend bundle | single 772 kB (231 kB gzip) bundle | route-level code splitting |
+| Frontend bundle | vendor chunks split (app chunk 116 kB / 30 kB gzip; total ≈ 795 kB / 235 kB gzip) | route-level lazy loading would cut first-load size further |
 | Accessibility audit | semantic HTML, labels, focus states, keyboard row navigation — no formal WCAG audit | — |
 
 ## Operational limitations
